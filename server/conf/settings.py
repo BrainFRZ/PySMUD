@@ -30,9 +30,19 @@ from evennia.settings_default import *
 ######################################################################
 # Evennia base server config
 ######################################################################
+from utils import tick_colors
+
 
 # This is the name of your game. Make it catchy!
 SERVERNAME = "SuperMUD"
+
+# Assign the settings variables
+COLOR_ANSI_EXTRA_MAP = tick_colors.TICK_COLOR_ANSI_EXTRA_MAP
+COLOR_XTERM256_EXTRA_FG = tick_colors.TICK_COLOR_XTERM256_EXTRA_FG
+COLOR_XTERM256_EXTRA_BG = tick_colors.TICK_COLOR_XTERM256_EXTRA_BG
+COLOR_XTERM256_EXTRA_GFG = tick_colors.TICK_COLOR_XTERM256_EXTRA_GFG
+COLOR_XTERM256_EXTRA_GBG = tick_colors.TICK_COLOR_XTERM256_EXTRA_GBG
+COLOR_ANSI_BRIGHT_BG_EXTRA_MAP = tick_colors.TICK_COLOR_ANSI_XTERM256_BRIGHT_BG_EXTRA_MAP
 
 
 ######################################################################
