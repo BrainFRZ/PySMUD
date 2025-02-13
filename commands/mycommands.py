@@ -16,6 +16,29 @@ class CmdEcho(Command):
         self.caller.msg(f"Echo: '{self.args}'")
 
 
+class CmdHit(Command):
+    """
+    Hit a target.
+
+    Usage:
+      hit <target>
+
+    """
+    key = "hit"
+
+    def func(self):
+        args = self.args.strip()
+        if not args:
+            self.caller.msg("Who do you want to hit?")
+            return
+        target = self.caller.search(args)
+        if not target:
+            self.caller.msg("You can't find that target.")
+            return
+        self.caller.msg(f"You hit {target.key} with full force!")
+        target.msg(f"You got hit by {self.caller.key} with full force!")
+
+
 class MyCmdSet(CmdSet):
 
     def at_cmdset_creation(self):
