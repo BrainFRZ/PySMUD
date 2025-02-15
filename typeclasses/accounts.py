@@ -136,7 +136,30 @@ class Account(DefaultAccount):
 
     """
 
-    pass
+    def at_object_creation(self):
+        self.db.roster = []
+        self.db.karma = 0
+
+    def is_playable_name(self, name: str) -> bool:
+        names = [char.name for char in self.db.roster]
+        return name in names
+
+
+class RosterCharacterData:
+    """
+    This class is used to store data about a character in the roster. It is used to display an accounts list of
+    characters during login.
+    """
+
+    def __init__(self):
+        self.name = ""
+        self.tier = 1
+        self.archetype = None
+        self.modifier = None
+
+    def __str__(self):
+        return f"`W{self.name} `c- `xTier {self.tier} {self.archetype} ({self.modifier})"
+
 
 
 class Guest(DefaultGuest):
