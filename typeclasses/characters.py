@@ -23,4 +23,12 @@ class Character(ObjectParent, DefaultCharacter):
 
     """
 
-    pass
+    def at_pre_move(self, destination, **kwargs):
+       """
+       Called by self.move_to when trying to move somewhere. If this returns
+       False, the move is immediately cancelled.
+       """
+       if self.db.is_sitting:
+           self.msg("You need to stand up first.")
+           return False
+       return True
