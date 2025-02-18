@@ -17,24 +17,41 @@ To change the login screen in this module, do one of the following:
 The commands available to the user when the connection screen is shown
 are defined in evennia.default_cmds.UnloggedinCmdSet. The parsing and display
 of the screen is done by the unlogged-in "look" command.
-
 """
 
-from django.conf import settings
-
-from evennia import utils
-
 CONNECTION_SCREEN = """
-|b==============================================================|n
- Welcome to |g{}|n, version {}!
-
- If you have an existing account, connect to it by typing:
-      |wconnect <username> <password>|n
- If you need to create an account, type (without the <>'s):
-      |wcreate <username> <password>|n
-
- If you have spaces in your username, enclose it in quotes.
- Enter |whelp|n for more info. |wlook|n will re-show this screen.
-|b==============================================================|n""".format(
-    settings.SERVERNAME, utils.get_evennia_version("short")
-)
+ `Y .oooooo..o                                           
+ d8P'    Y8                                           
+ Y88bo.        oooo  oooo  ooo.oooo     .ooooo.  oooo d8b 
+  "Y8888o.     888   888   '88'  88b  d88' 88O'  888""8P 
+     ""Y88b   .888   888   888  888  888ooo'''  888     
+ oo     .d8P  888   888   888   88  888    .n  888     
+ 8""88888P'   V8'\"""V8P  888bod8P'  Y8bod8P' d888b    
+                        888                          
+                      o888o                         
+                                                      
+ ooo        ooooo  ooooo     ooo  oooooooooo.            
+  88.       .888'   888       8    888'   Y8D.
+  888b     d'888    888       8   888      888          
+  8 Y88. .P  888   888       8   888      888          
+  8  888'    888  '88       8   '88      888          
+  8    Y     888   88.    .8'   888     d88'          
+ o8o        o888o   'YbodP'   o8888bood8P'`x
+ 
+SuperMUD Phase 2 code by Printer and Editor, using the Evennia framework
+Combat system inspired by Haven, written by Tyr and Discordance
+World created by MEZ
+Special Thanks to Bustahemo, Petal, and dkasak
+Dedicated to Torn
+ 
+`cWelcome to SuperMUD, a love letter to superhero media that takes place in an
+alternate Earth where the existence of superhumans have shaped American history 
+significantly since the 1940s. While our game is a love letter to comic book
+giants DC and Marvel, the characters created in SuperMUD are pastiches, analogs 
+and tributes to these characters, and should otherwise be original.
+ 
+Our game takes place in Bendis City, a sprawling metropolis in California, that
+just so conveniently happens to be the center of the fantastic, where heroes and
+villains brawling is the price you pay for the cheap real estate and the chance
+to rub shoulders with greatness.`x
+"""

@@ -98,15 +98,19 @@ def dollar_float(num: float) -> str:
     return dollar_int(int(num))
 
 
-def listify(words: list[str]) -> str:
+def listify(words: list[str], use_and: bool = True) -> str:
     """
     Converts a list of words to a string with commas and "and" before the last word. An Oxford comma is used.
     :param words: list of words to be joined into a comma-separated list
+    :param use_and: if True, "and" will be used before the last word in the list; otherwise, there will only be a comma
     :return: A comma-separated list of `words` with an Oxford comma and "and" before the last word.
     """
+    if not use_and:
+        return ", ".join(words)
+
     if len(words) == 1:
         return words[0]
-    elif len(words) == 2:
+    elif len(words) == 2 and use_and:
         return f"{words[0]} and {words[1]}"
     else:
         return f"{', '.join(words[:-1])}, and {words[-1]}"

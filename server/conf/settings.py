@@ -25,7 +25,6 @@ put secret game- or server-specific settings in secret_settings.py.
 """
 
 # Use the defaults from Evennia unless explicitly overridden
-from evennia.settings_default import *
 
 ######################################################################
 # Evennia base server config
@@ -35,6 +34,12 @@ from utils import tick_colors
 
 # This is the name of your game. Make it catchy!
 SERVERNAME = "SuperMUD"
+CMDSET_UNLOGGEDIN = "systems.login.login.UnloggedinCmdSet"
+
+AUTO_CREATE_CHARACTER_WITH_ACCOUNT = False
+AUTO_PUPPET_ON_LOGIN = False
+CHARGEN_MENU = "systems.login.chargen_menu"
+MAX_NR_CHARACTERS = 10
 
 # Assign the settings variables
 COLOR_ANSI_EXTRA_MAP = tick_colors.TICK_COLOR_ANSI_EXTRA_MAP
@@ -44,6 +49,14 @@ COLOR_XTERM256_EXTRA_GFG = tick_colors.TICK_COLOR_XTERM256_EXTRA_GFG
 COLOR_XTERM256_EXTRA_GBG = tick_colors.TICK_COLOR_XTERM256_EXTRA_GBG
 COLOR_ANSI_BRIGHT_BG_EXTRA_MAP = tick_colors.TICK_COLOR_ANSI_XTERM256_BRIGHT_BG_EXTRA_MAP
 
+# How many years in the future SuperMUD takes place.
+YEARS_IN_THE_FUTURE = 2
+
+# Default timezone the majority of the grid. This can be overridden in any given area.
+TIMEZONE = "America/Los_Angeles"
+
+# Minimum age for characters
+MINIMUM_CHARACTER_AGE = 18
 
 ######################################################################
 # Settings given in secret_settings.py override those in this file.

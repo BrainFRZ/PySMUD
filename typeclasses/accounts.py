@@ -23,6 +23,7 @@ several more options for customizing the Guest account system.
 """
 
 from evennia.accounts.accounts import DefaultAccount, DefaultGuest
+from pygments.lexers import archetype
 
 
 class Account(DefaultAccount):
@@ -133,15 +134,21 @@ class Account(DefaultAccount):
      - at_post_remove_character(char)
      - at_pre_channel_msg(message, channel, senders=None, **kwargs)
      - at_post_chnnel_msg(message, channel, senders=None, **kwargs)
-
     """
 
-    def at_object_creation(self):
+    def at_account_creation(self):
         self.db.roster = []
         self.db.karma = 0
+        self.db.email = ""
+
+
+    def at_first_login(self, **kwargs):
+        self.execute_cmd("charcreate")
+
 
     def is_playable_name(self, name: str) -> bool:
-        names = [char.name for char in self.db.roster]
+        roster = self.db.roster or []
+        names = [char.name for char in roster]
         return name in names
 
 
@@ -150,22 +157,15 @@ class RosterCharacterData:
     This class is used to store data about a character in the roster. It is used to display an accounts list of
     characters during login.
     """
-
     def __init__(self):
         self.name = ""
         self.tier = 1
         self.archetype = None
         self.modifier = None
 
+
     def __str__(self):
-        return f"`W{self.name} `c- `xTier {self.tier} {self.archetype} ({self.modifier})"
-
-
-
-class Guest(DefaultGuest):
-    """
-    This class is used for guest logins. Unlike Accounts, Guests and their
-    characters are deleted after disconnection.
-    """
-
-    pass
+        if archetype:
+            return f"`W{self.name} `c- `xTier {self.tier} {self.archetype} ({self.modifier})"
+        else:
+            return f"`W{self.name}"
