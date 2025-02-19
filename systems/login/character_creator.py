@@ -99,7 +99,7 @@ class ContribCmdCharCreate(MuxAccountCommand):
                 entry.tier = char.db.tier
                 entry.archetype = char.db.race.archetype(char.db.tier)
                 entry.modifier = char.db.modifier
-                account.db.roster.append(entry)
+                account.db.roster[char.key.lower()] = entry
 
                 # This means character creation was completed - start playing!
                 # Execute the ic command to start puppeting the character
@@ -123,13 +123,37 @@ class ContribChargenAccount(DefaultAccount):
     is about to make their first character.
     """
 
-    ooc_no_chars = """
+    ooc_msg_no_chars = """
 `Y--------------------------------------------------------------------`x
 Welcome to `YSuperMUD`x! If this is your first time here, please type '`cstart`x' to get oriented.
 
 You can use '`croster list`x' to see what pre-made characters might be available, or '`ccreate`x' if you want to create your own character.
 `Y--------------------------------------------------------------------`x
 """.strip()
+
+    def at_account_creation(self):
+        # Roster list mapping playable character names to their RosterCharacterData objects
+        self.db.roster = {}
+        self.db.karma = 0
+        self.db.email = ""
+
+
+    def is_playable_name(self, name: str) -> bool:
+        return name.lower() in self.db.roster
+
+
+    def show_login_info(self) -> str:
+        """Displays the login info for the account for when logging in or in OOC mode."""
+        roster = self.db.roster
+        text = f"Karma: {self.db.karma}\n"
+        if roster:
+            text += "Characters:\n  "
+            text += "\n  ".join(str(roster[character]) for character in roster)
+            text += "\nPlease choose a character to play or '`ccreate`x' a new one."
+        else:
+            text = "You don't have any characters yet. You can '`ccreate`x' one now to start playing."
+        return text
+
 
     def at_look(self, target=None, session=None, **kwargs):
         """

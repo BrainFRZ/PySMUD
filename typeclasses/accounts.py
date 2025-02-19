@@ -138,17 +138,5 @@ class Account(ContribChargenAccount):
      - at_post_chnnel_msg(message, channel, senders=None, **kwargs)
     """
 
-    def at_account_creation(self):
-        self.db.roster = []
-        self.db.karma = 0
-        self.db.email = ""
-
-
     def at_first_login(self, **kwargs):
         self.execute_cmd("charcreate")
-
-
-    def is_playable_name(self, name: str) -> bool:
-        roster = self.db.roster or []
-        names = [char.name for char in roster]
-        return name in names

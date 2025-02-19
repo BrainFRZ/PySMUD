@@ -85,8 +85,7 @@ def node_confirm_new_username(caller, raw_text, **kwargs):
 
     text = "`xCreate a new account `c{}`x? (y/N)".format(username)
     options = (
-        {"key": ("y", "yes"),
-         "goto": ("node_enter_password", {"username": username, "new_user": True})},
+        {"key": ("y", "yes"), "goto": ("node_enter_password", {"username": username, "new_user": True})},
         {"key": ("q", "quit"), "goto": "node_quit_or_login"},
         {"key": "_default", "goto": "node_enter_username"},
     )
@@ -187,26 +186,13 @@ def node_character_selection(caller, raw_text, **kwargs):
 
     account = kwargs["account"]
 
-    if not account.db.roster:
-        text = "You don't have any characters yet. You can '`ccreate`x' one now to start playing."
-        options = (
-            {"key": "create", "goto": ("node_quit_or_login", {"login": True, "account": account})},
-            {"key": ("quit", "q"), "goto": "node_quit_or_login"},
-            {"key": "_default", "goto": ("node_character_selection", kwargs)},
-        )
-        return text, options
-
-    text = "Karma: {}\n".format(account.db.karma)
-    text += "Characters:\n"
-    for character in account.db.roster:
-        text += "  {}\n".format(str(character))
-    text += "\nPlease choose a character to play or '`ccreate`x' a new one."
     options = (
         {"key": "", "goto": ("node_character_selection", kwargs)},
         {"key": "create", "goto": ("node_quit_or_login", {"login": True, "account": account})},
         {"key": ("quit", "q"), "goto": "node_quit_or_login"},
-        {"key": "_default", "goto": (_check_input, kwargs)}
+        {"key": "_default", "goto": (_check_input, kwargs)},
     )
+    text = account.show_login_info()
     return text, options
 
 
@@ -217,11 +203,9 @@ def node_quit_or_login(caller, raw_text, **kwargs):
         account = kwargs.get("account")
         name = kwargs.get("name")
         if not name:
-            caller.msg("""
-Welcome to `YSuperMUD`x! If this is your first time here, please type '`cstart`x' to get oriented.
-
-You can use '`croster list`x' to see what pre-made characters might be available, or '`ccreate`x' if you want to create your own character.""")
             session.sessionhandler.login(session, account)
+            account.execute_cmd("look", session=session)
+            account.execute_cmd("create", session=session)
             return "", {}
 
         session.msg("`YLogging in ...`x")
