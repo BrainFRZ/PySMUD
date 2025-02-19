@@ -40,3 +40,5 @@ class Character(ObjectParent, DefaultCharacter):
         self.db.apparent_age = 45
         self.db.intro = "A newcomer"
         self.db.race = None
+        self.db.codename1 = ""
+        self.db.codename2 = ""

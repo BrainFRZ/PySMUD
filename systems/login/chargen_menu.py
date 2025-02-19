@@ -351,6 +351,7 @@ def name_validator(caller, first_name: str, last_name: str) -> bool:
     if last_name and (not last_name.isalnum() or len(last_name) < 2):
         return False
 
+    """
     # Filter for first_name attribute, exact match, case insensitive
     first_name = Q(db_attributes__db_key="first_name", db_attributes__db_value__iexact=first_name)
     # Filter for last_name attribute, exact match, case insensitive
@@ -370,7 +371,13 @@ def name_validator(caller, first_name: str, last_name: str) -> bool:
     codenames = Character.objects.filter_family(first_vs_code1 | first_vs_code2)
 
     return not (full_name or codenames)
-
+    """
+    duplicate_names = [char for char in Character.objects.all()
+        if char.db.first_name.lower() == first_name.lower() and char.db.last_name.lower() == last_name.lower()]
+    duplicate_codenames = [char for char in Character.objects.all()
+        if (char.db.codename1 and char.db.codename1.lower() == first_name.lower())
+            or (char.db.codename2 and char.db.codename2.lower() == first_name.lower())]
+    return not (duplicate_names or duplicate_codenames)
 
 def email_validator(email: str) -> bool:
     """Validates the email entered by the user. The email must be a valid email address.
