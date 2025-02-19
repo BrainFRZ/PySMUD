@@ -15,15 +15,15 @@ from evennia.commands.cmdset import CmdSet
 from evennia.commands.default.account import CmdIC
 from evennia.commands.default.muxcommand import MuxAccountCommand
 from evennia.objects.models import ObjectDB
-from evennia.utils.evmenu import EvMenu
-from evennia.utils.utils import is_iter, string_partial_matching
+from evennia.utils.utils import string_partial_matching
+
+from containers.RosterCharacterData import RosterCharacterData
+from server.conf.settings import CHARGEN_MENU
+from systems.login.chargen_menu import ChargenEvMenu
 
 _MAX_NR_CHARACTERS = settings.MAX_NR_CHARACTERS
 
-try:
-    _CHARGEN_MENU = settings.CHARGEN_MENU
-except AttributeError:
-    _CHARGEN_MENU = "evennia.contrib.rpg.character_creator.example_menu"
+_CHARGEN_MENU = CHARGEN_MENU
 
 
 class ContribCmdIC(CmdIC):
@@ -66,7 +66,7 @@ class ContribCmdCharCreate(MuxAccountCommand):
             new_character = in_progress[0]
         else:
             # Generate a randomized key so the player can choose a character name later
-            key = "".join(choices(string.ascii_letters + string.digits, k=16))
+            key = "".join(choices(string.ascii_letters + string.digits, k=10))
 
             new_character, errors = account.create_character(
                 key=key, location=None, ip=session.address
@@ -93,11 +93,19 @@ class ContribCmdCharCreate(MuxAccountCommand):
                 # This means the character creation process was exited in the middle
                 account.execute_cmd("look", session=session)
             else:
+                # Create a new roster entry for the account
+                entry = RosterCharacterData()
+                entry.name = char.db.first_name if not char.db.last_name else f"{char.db.first_name} {char.db.last_name}"
+                entry.tier = char.db.tier
+                entry.archetype = char.db.race.archetype(char.db.tier)
+                entry.modifier = char.db.modifier
+                account.db.roster.append(entry)
+
                 # This means character creation was completed - start playing!
                 # Execute the ic command to start puppeting the character
                 account.execute_cmd("ic {}".format(char.key), session=session)
 
-        EvMenu(session, _CHARGEN_MENU, startnode=startnode, cmd_on_exit=finish_char_callback)
+        ChargenEvMenu(session, _CHARGEN_MENU, startnode=startnode, cmd_on_exit=finish_char_callback)
 
 
 class ContribChargenCmdSet(CmdSet):
@@ -141,58 +149,4 @@ You can use '`croster list`x' to see what pre-made characters might be available
 
         """
 
-        if target and not is_iter(target):
-            # single target - just show it
-            if hasattr(target, "return_appearance"):
-                return target.return_appearance(self)
-            else:
-                return f"{target} has no in-game appearance."
-
-        # multiple targets - this is a list of characters
-        characters = list(tar for tar in target if tar) if target else []
-        ncars = len(characters)
-
-        if not characters:
-            txt_characters = "You don't have a character yet."
-        else:
-            max_chars = (
-                "unlimited"
-                if self.is_superuser or _MAX_NR_CHARACTERS is None
-                else _MAX_NR_CHARACTERS
-            )
-
-            char_strings = []
-            for char in characters:
-                csessions = char.sessions.all()
-                if csessions:
-                    for sess in csessions:
-                        # character is already puppeted
-                        sid = sess in sessions and sessions.index(sess) + 1
-                        if sess and sid:
-                            char_strings.append(
-                                f" - |G{char.name}|n [{', '.join(char.permissions.all())}] "
-                                f"(played by you in session {sid})"
-                            )
-                        else:
-                            char_strings.append(
-                                f" - |R{char.name}|n [{', '.join(char.permissions.all())}] "
-                                "(played by someone else)"
-                            )
-                elif char.db.chargen_step:
-                    # currently in-progress character; don't display placeholder names
-                    char_strings.append(" - |Yin progress|n (|wcharcreate|n to continue)")
-                    continue
-                else:
-                    # character is "free to puppet"
-                    char_strings.append(f" - {char.name} [{', '.join(char.permissions.all())}]")
-
-            txt_characters = (
-                f"Available character(s) ({ncars}/{max_chars}, |wic <name>|n to play):|n\n"
-                + "\n".join(char_strings)
-            )
-        return self.ooc_appearance_template.format(
-            header=txt_header,
-            sessions=txt_sessions,
-            characters=txt_characters,
-            footer="",
-        )
+        return self.ooc_appearance_template

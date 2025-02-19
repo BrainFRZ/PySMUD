@@ -62,7 +62,7 @@ def node_enter_username(caller, raw_text, **kwargs):
         except _ACCOUNT.DoesNotExist:
             return "node_confirm_new_username", {"username": username}
         else:
-            return "node_enter_password", {"username": username}
+            return "node_enter_password", {"username": username, "new_user": False}
 
     text = "`WWhat is your account name?"
 
@@ -128,9 +128,10 @@ def node_enter_password(caller, raw_string, **kwargs):
 
         if account:
             if new_user:
-                session.msg("`YA new account `c{}`Y was created. Welcome to the chaos! To get started, please type '`cstart`x'.".format(username))
-            # pass login info to login node
-            return "node_character_selection", {"account": account, "new_user": True}
+                session.msg("`YA new account `c{}`Y was created. Welcome to the chaos!".format(username))
+                return "node_quit_or_login", {"account": account, "new_user": True}
+            else:
+                return "node_character_selection", {"account": account}
         else:
             # restart due to errors
             session.msg("`R{}".format("\n".join(errors)))
@@ -187,14 +188,19 @@ def node_character_selection(caller, raw_text, **kwargs):
     account = kwargs["account"]
 
     if not account.db.roster:
-        return "node_quit_or_login", {"login": True, "account": account}
-    else:
-        text = "Karma: {}\n".format(account.db.karma)
-        text += "Characters:\n"
-        for character in account.db.roster:
-            text += "  {}\n".format(character)
-        text += "\nPlease choose a character to play or `ccreate`x to create a new one."
+        text = "You don't have any characters yet. You can '`ccreate`x' one now to start playing."
+        options = (
+            {"key": "create", "goto": ("node_quit_or_login", {"login": True, "account": account})},
+            {"key": ("quit", "q"), "goto": "node_quit_or_login"},
+            {"key": "_default", "goto": ("node_character_selection", kwargs)},
+        )
+        return text, options
 
+    text = "Karma: {}\n".format(account.db.karma)
+    text += "Characters:\n"
+    for character in account.db.roster:
+        text += "  {}\n".format(str(character))
+    text += "\nPlease choose a character to play or '`ccreate`x' a new one."
     options = (
         {"key": "", "goto": ("node_character_selection", kwargs)},
         {"key": "create", "goto": ("node_quit_or_login", {"login": True, "account": account})},

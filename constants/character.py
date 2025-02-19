@@ -41,7 +41,7 @@ class Hair(Enum):
     BALD: str = "`wno`x"
     GREEN: str = "`gg`Gree`gn`x"
     PINK: str = "`Mpink`x"
-    PUPRLE: str = "`mpurple`x"
+    PURPLE: str = "`mpurple`x"
     WHITE: str = "`Wwhite`x"
     BLACK: str = "`240black`x"
     BROWN: str = "`094brown`x"
@@ -68,9 +68,15 @@ class Race(Enum):
     DIVER: str = "`YDiver`x"
 
     @classmethod
-    def is_valid(cls, race: str) -> bool:
+    def validate(cls, race: str):
         """Returns True if the given race is valid, False otherwise. Case insensitive."""
-        return race.upper() in (member.name for member in Race.__members__.values())
+        special_names = {"META": Race.METAHUMAN, "SYNTH": Race.SYNTHETIC}
+        race = race.upper()
+        if race in (member.name for member in Race.__members__.values()):
+            return Race[race.upper()]
+        if race in special_names:
+            return special_names[race]
+        return None
 
 
     def race_tier_range(self) -> tuple[int, int]:

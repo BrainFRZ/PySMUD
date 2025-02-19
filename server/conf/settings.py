@@ -25,6 +25,7 @@ put secret game- or server-specific settings in secret_settings.py.
 """
 
 # Use the defaults from Evennia unless explicitly overridden
+from evennia.settings_default import *
 
 ######################################################################
 # Evennia base server config
@@ -53,7 +54,7 @@ COLOR_ANSI_BRIGHT_BG_EXTRA_MAP = tick_colors.TICK_COLOR_ANSI_XTERM256_BRIGHT_BG_
 YEARS_IN_THE_FUTURE = 2
 
 # Default timezone the majority of the grid. This can be overridden in any given area.
-TIMEZONE = "America/Los_Angeles"
+GAME_TIMEZONE = "America/Los_Angeles"
 
 # Minimum age for characters
 MINIMUM_CHARACTER_AGE = 18

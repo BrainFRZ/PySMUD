@@ -123,6 +123,7 @@ TICK_COLOR_ANSI_EXTRA_MAP = [
     (r"`G", _ANSI_HILITE + _ANSI_GREEN),
     (r"`Y", _ANSI_HILITE + _ANSI_YELLOW),
     (r"`B", _ANSI_HILITE + _ANSI_BLUE),
+    (r"`P", _ANSI_HILITE + _ANSI_MAGENTA),
     (r"`M", _ANSI_HILITE + _ANSI_MAGENTA),
     (r"`C", _ANSI_HILITE + _ANSI_CYAN),
     (r"`W", _ANSI_HILITE + _ANSI_WHITE),  # pure white
@@ -131,6 +132,7 @@ TICK_COLOR_ANSI_EXTRA_MAP = [
     (r"`g", _ANSI_UNHILITE + _ANSI_GREEN),
     (r"`y", _ANSI_UNHILITE + _ANSI_YELLOW),
     (r"`b", _ANSI_UNHILITE + _ANSI_BLUE),
+    (r"`p", _ANSI_UNHILITE + _ANSI_MAGENTA),
     (r"`m", _ANSI_UNHILITE + _ANSI_MAGENTA),
     (r"`c", _ANSI_UNHILITE + _ANSI_CYAN),
     (r"`w", _ANSI_UNHILITE + _ANSI_WHITE),  # light grey
@@ -157,10 +159,10 @@ TICK_COLOR_ANSI_EXTRA_MAP = [
     (r"`[D", _ANSI_BACK_BLACK),  # pure black background
 ]
 
-TICK_COLOR_XTERM256_EXTRA_FG = [r"`([0-5])([0-5])([0-5])"]  # |123 - foreground colour
-TICK_COLOR_XTERM256_EXTRA_BG = [r"`\[([0-5])([0-5])([0-5])"]  # |[123 - background colour
-TICK_COLOR_XTERM256_EXTRA_GFG = [r"`=([a-z])"]  # |=a - greyscale foreground
-TICK_COLOR_XTERM256_EXTRA_GBG = [r"`\[=([a-z])"]  # |[=a - greyscale background
+TICK_COLOR_XTERM256_EXTRA_FG = [r"`([0-9])([0-9])([0-9])"]  # `123 - foreground colour
+TICK_COLOR_XTERM256_EXTRA_BG = [r"`\[([0-9])([0-9])([0-9])"]  # `[123 - background colour
+TICK_COLOR_XTERM256_EXTRA_GFG = [r"`=([a-z])"]  # `=a - greyscale foreground
+TICK_COLOR_XTERM256_EXTRA_GBG = [r"`\[=([a-z])"]  # `[=a - greyscale background
 
 TICK_COLOR_ANSI_XTERM256_BRIGHT_BG_EXTRA_MAP = [
     (r"`[r", r"`[500"),

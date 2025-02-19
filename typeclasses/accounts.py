@@ -25,8 +25,10 @@ several more options for customizing the Guest account system.
 from evennia.accounts.accounts import DefaultAccount, DefaultGuest
 from pygments.lexers import archetype
 
+from systems.login.character_creator import ContribChargenAccount
 
-class Account(DefaultAccount):
+
+class Account(ContribChargenAccount):
     """
     An Account is the actual OOC player entity. It doesn't exist in the game,
     but puppets characters.
@@ -150,22 +152,3 @@ class Account(DefaultAccount):
         roster = self.db.roster or []
         names = [char.name for char in roster]
         return name in names
-
-
-class RosterCharacterData:
-    """
-    This class is used to store data about a character in the roster. It is used to display an accounts list of
-    characters during login.
-    """
-    def __init__(self):
-        self.name = ""
-        self.tier = 1
-        self.archetype = None
-        self.modifier = None
-
-
-    def __str__(self):
-        if archetype:
-            return f"`W{self.name} `c- `xTier {self.tier} {self.archetype} ({self.modifier})"
-        else:
-            return f"`W{self.name}"
