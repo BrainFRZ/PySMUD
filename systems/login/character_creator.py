@@ -123,13 +123,13 @@ class ContribChargenAccount(DefaultAccount):
     is about to make their first character.
     """
 
-    ooc_msg_no_chars = """
-`Y--------------------------------------------------------------------`x
-Welcome to `YSuperMUD`x! If this is your first time here, please type '`cstart`x' to get oriented.
-
-You can use '`croster list`x' to see what pre-made characters might be available, or '`ccreate`x' if you want to create your own character.
-`Y--------------------------------------------------------------------`x
-""".strip()
+#    ooc_msg_no_chars = """
+#`Y--------------------------------------------------------------------`x
+#Welcome to `YSuperMUD`x! If this is your first time here, please type '`cstart`x' to get oriented.
+#
+#You can use '`croster list`x' to see what pre-made characters might be available, or '`ccreate`x' if you want to create your own character.
+#`Y--------------------------------------------------------------------`x
+#""".strip()
 
     def at_account_creation(self):
         # Roster list mapping playable character names to their RosterCharacterData objects
@@ -172,5 +172,5 @@ You can use '`croster list`x' to see what pre-made characters might be available
                 off to any recipient (usually to ourselves)
 
         """
-        characters = list(tar for tar in target if tar) if target else []
-        return "" if len(characters) else self.ooc_no_chars
+#        return "" if len(self.db.roster) else self.ooc_msg_no_chars
+        return ""

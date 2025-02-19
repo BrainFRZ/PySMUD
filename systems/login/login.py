@@ -128,7 +128,7 @@ def node_enter_password(caller, raw_string, **kwargs):
         if account:
             if new_user:
                 session.msg("`YA new account `c{}`Y was created. Welcome to the chaos!".format(username))
-                return "node_quit_or_login", {"account": account, "login": True}
+                return "node_quit_or_login", {"account": account, "login": True, "new_user": True}
             else:
                 return "node_character_selection", {"account": account}
         else:
@@ -204,8 +204,9 @@ def node_quit_or_login(caller, raw_text, **kwargs):
         name = kwargs.get("name")
         if not name:
             session.sessionhandler.login(session, account)
-            account.execute_cmd("look", session=session)
-            account.execute_cmd("create", session=session)
+            new_user = kwargs.get("new_user")
+            if not new_user:
+                account.execute_cmd("create", session=session)
             return "", {}
 
         session.msg("`YLogging in ...`x")
