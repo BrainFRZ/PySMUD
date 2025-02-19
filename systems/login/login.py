@@ -129,7 +129,7 @@ def node_enter_password(caller, raw_string, **kwargs):
         if account:
             if new_user:
                 session.msg("`YA new account `c{}`Y was created. Welcome to the chaos!".format(username))
-                return "node_quit_or_login", {"account": account, "new_user": True}
+                return "node_quit_or_login", {"account": account, "login": True}
             else:
                 return "node_character_selection", {"account": account}
         else:
@@ -183,7 +183,7 @@ def node_character_selection(caller, raw_text, **kwargs):
         if account.is_playable_name(name):
             return "node_quit_or_login", {"login": True, "account": account, "name": name}
         else:
-            return "node_confirm_character_creation", {"account": account, "name": name}
+            return None, {"account": account}
 
     account = kwargs["account"]
 
@@ -226,7 +226,7 @@ You can use '`croster list`x' to see what pre-made characters might be available
 
         session.msg("`YLogging in ...`x")
         session.sessionhandler.login(session, account)
-        account.execute_cmd("ic {}".format(name), session=session)
+        account.execute_cmd(f"ic {name}", session=session)
     else:
         session.sessionhandler.disconnect(session, "Logging off. We hope to see you soon!")
     return "", {}

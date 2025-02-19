@@ -119,11 +119,11 @@ class ContribChargenCmdSet(CmdSet):
 
 class ContribChargenAccount(DefaultAccount):
     """
-    A modified Account class that changes the OOC look output to better match the contrib and
-    incorporate in-progress characters.
+    A modified Account class that hides any OOC look output unless there are no characters, which would mean the player
+    is about to make their first character.
     """
 
-    ooc_appearance_template = """
+    ooc_no_chars = """
 `Y--------------------------------------------------------------------`x
 Welcome to `YSuperMUD`x! If this is your first time here, please type '`cstart`x' to get oriented.
 
@@ -148,5 +148,5 @@ You can use '`croster list`x' to see what pre-made characters might be available
                 off to any recipient (usually to ourselves)
 
         """
-
-        return self.ooc_appearance_template
+        characters = list(tar for tar in target if tar) if target else []
+        return "" if len(characters) else self.ooc_no_chars
