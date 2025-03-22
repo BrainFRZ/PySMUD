@@ -52,6 +52,8 @@ class ContribCmdCharCreate(MuxAccountCommand):
     aliases = ["create"]
     locks = "cmd:pperm(Player) and is_ooc()"
     help_category = "General"
+    account = None
+    session = None
 
     def func(self):
         """Create the new character"""

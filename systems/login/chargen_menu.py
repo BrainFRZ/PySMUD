@@ -7,7 +7,6 @@ Printer - February 2025
 import pendulum
 from re import match as regex_match
 
-from django.db.models import Q
 from evennia.utils.evmenu import EvMenu
 
 from server.conf.settings import YEARS_IN_THE_FUTURE, GAME_TIMEZONE, MINIMUM_CHARACTER_AGE
