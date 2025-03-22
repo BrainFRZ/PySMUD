@@ -332,7 +332,6 @@ def node_quit(caller, raw_string, **kwargs):
 
 def name_validator(caller, first_name: str, last_name: str) -> bool:
     """Validates the first or name entered by the user. The first name must be at least one character long.
-    Written with assistance from Caracal Inspecter.
     :param caller: The character object.
     :param first_name: The character's first name.
     :param last_name: The character's last name.'
@@ -351,27 +350,6 @@ def name_validator(caller, first_name: str, last_name: str) -> bool:
     if last_name and (not last_name.isalnum() or len(last_name) < 2):
         return False
 
-    """
-    # Filter for first_name attribute, exact match, case insensitive
-    first_name = Q(db_attributes__db_key="first_name", db_attributes__db_value__iexact=first_name)
-    # Filter for last_name attribute, exact match, case insensitive
-    last_name = Q(db_attributes__db_key="last_name", db_attributes__db_value__iexact=last_name)
-    # Filter for first_name against anyone else's first codename, exact match, case insensitive
-    first_vs_code1 = Q(db_attributes__db_key="codename1", db_attributes__db_value__iexact=first_name)
-    # Filter for first_name against anyone else's second codename, exact match, case insensitive
-    first_vs_code2 = Q(db_attributes__db_key="codename2", db_attributes__db_value__iexact=first_name)
-
-    # now we actually do the checks!
-    # NOTE: these will prevent conflicts with NPCs as well if they inherit from Character
-    # We don't want two people with matching full names
-    full_name = Character.objects.filter_family(first_name & last_name)
-
-    # We don't want anyone's first name to match either of someone else's codenames
-    # In the future, this will use a GLOBAL_SCRIPT
-    codenames = Character.objects.filter_family(first_vs_code1 | first_vs_code2)
-
-    return not (full_name or codenames)
-    """
     duplicate_names = [char for char in Character.objects.all()
         if char.db.first_name.lower() == first_name.lower() and char.db.last_name.lower() == last_name.lower()]
     duplicate_codenames = [char for char in Character.objects.all()
